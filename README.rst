@@ -128,10 +128,18 @@ On RHEL6, with Apache+mod_wsgi (via software collections) in daemon mode, this m
     Alias /static/ /srv/cfgov/current/static/
 
     <Directory /srv/cfgov/current/>
-    Require all granted
+      Require all granted
     </Directory>
     
+Also with mod_wsgi, it's recommended that you set an empty virtualenv as your WSGIPythonHome. 
 
+http://modwsgi.readthedocs.org/en/develop/user-guides/virtual-environments.html#baseline-environment
+
+We've got you covered::
+
+   WSGIPythonHome /srv/cfgov/current/empty_venv
+
+.. _empty virtualenv: 
 Known issues
 ------------
 
