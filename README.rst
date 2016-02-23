@@ -140,23 +140,9 @@ Document any known significant shortcomings with the software.
 Getting help
 ------------
 
-Instruct users how to get help with this software; this might include
-links to an issue tracker, wiki, mailing list, etc.
-
-**Example**
-
 If you have questions, concerns, bug reports, etc, please file an issue
 in this repository's Issue Tracker.
 
-Getting involved
-----------------
-
-This section should detail why people should get involved and describe
-key areas you are currently focusing on; e.g., trying to get feedback on
-features, fixing certain bugs, building important pieces, etc.
-
-General instructions on *how* to contribute should be stated with a link
-to `CONTRIBUTING <CONTRIBUTING.md>`__.
 
 --------------
 
@@ -167,14 +153,4 @@ Open source licensing info
 2. LICENSE
 3. `CFPB Source Code
    Policy <https://github.com/cfpb/source-code-policy/>`__
-
---------------
-
-Credits and references
-----------------------
-
-1. Projects that inspired you
-2. Related projects
-3. Books, papers, talks, or other sources that have meaningful impact or
-   influence on this project
 
