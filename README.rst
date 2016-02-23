@@ -1,62 +1,14 @@
-CFPB Open Source Project Template Instructions
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-1. Create a new project.
-2. Copy these files into the new project.
-3. Update the README, replacing the contents below as prescribed.
-4. Add any libraries, assets, or hard dependencies whose source code
-   will be included in the project's repository to the *Exceptions*
-   section in the `TERMS <TERMS.md>`__.
-
--  If no exceptions are needed, remove that section from TERMS.
-
-5. If working with an existing code base, answer the questions on the
-   `open source checklist <opensource-checklist.md>`__
-6. Delete these instructions and everything up to the *Project Title*
-   from the README.
-7. Write some great software and tell people about it.
-
-    Keep the README fresh! It's the first thing people see and will make
-    the initial impression.
-
---------------
-
-Project Title
+Drama-free Django
 =============
 
-**Description**: Put a meaningful, short, plain-language description of
-what this project is trying to accomplish and why it matters. Describe
-the problem(s) this project solves. Describe how this software can
-improve the lives of its audience.
+This project aims to make Django projects easy to deploy. It provides a command-line tool for bundling your project and it's dependencies into a zip file (called a "build") and injecting environment-specific configuration (called a "release"). These definitions of "build" and "release" are inspired by chapter 5 of The Twelve Factor App: 
 
-Other things to include:
-
--  **Technology stack**: Indicate the technological nature of the
-   software, including primary programming language(s) and whether the
-   software is intended as standalone or as a module in a framework or
-   other ecosystem.
--  **Status**: Alpha, Beta, 1.1, etc. It's OK to write a sentence, too.
-   The goal is to let interested people know where this project is at.
-   This is also a good place to link to the
-   `CHANGELOG <CHANGELOG.md>`__.
--  **Links to production or demo instances**
--  Describe what sets this apart from related-projects. Linking to
-   another doc or page is OK if this can't be expressed in a sentence or
-   two.
-
-**Screenshot**: If the software has visual components, place a
-screenshot after the description; e.g.,
-
-.. figure:: https://raw.githubusercontent.com/cfpb/open-source-project-template/master/screenshot.png
-   :alt: 
+http://12factor.net/build-release-run
 
 Dependencies
 ------------
 
-Describe any dependencies that must be installed for this software to
-work. This includes programming languages, databases or other storage
-mechanisms, build tools, frameworks, and so forth. If specific versions
-of other software are required, or known not to work, call that out.
+This has only been tested on 64-bit Linux, with Python 2.7. The system that generates builds needs to have 'pip' and 'wheel' installed, and whatever else is needed to build your Python dependencies. Servers you deploy too must only have a Python 2.7 interpreter, and a server that can run WSGI apps, like Apache with mod_wsgi.
 
 Installation
 ------------
