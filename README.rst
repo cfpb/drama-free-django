@@ -21,7 +21,7 @@ This package isn't in PyPI yet-- in the meantime, you should be able to install 
 Make a build
 -----
 
-Like this::
+::
 
    bash@:~$ no-drama build --help
    usage: no-drama build [-h] project_path requirements_file name label
