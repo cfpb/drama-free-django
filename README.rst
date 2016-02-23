@@ -23,7 +23,6 @@ Make a build
 
 ::
 
-   bash@:~$ no-drama build --help
    usage: no-drama build [-h] project_path requirements_file name label
 
    positional arguments:
@@ -48,10 +47,34 @@ If all goes well, a zip file will be created in your current directory, named li
 
 .. _cfgov-refresh: https://github.com/cfpb/cfgov-refresh.git
 
-How to test the software
-------------------------
 
-If the software includes automated tests, detail how to run those tests.
+Make a release
+-----
+
+::
+
+   usage: no-drama release [-h] [--paths PATHS]
+                           [--requirements_file REQUIREMENTS_FILE]
+                           [--append-wsgi APPEND_WSGI]
+                           build_zip vars slug
+   
+   positional arguments:
+     build_zip             path to a zip file generated with 'no-drama build'
+     vars                  JSON dictionary of env variables
+     slug                  a label for this release
+
+   optional arguments:
+     -h, --help            show this help message and exit
+     --paths PATHS         json file for overriding default paths
+     --requirements_file REQUIREMENTS_FILE
+                           just like you would 'pip install -r'. Let's you add
+                           more wheels to the build
+     --append-wsgi APPEND_WSGI
+                           text file w/ additional python code to modify the wsgi
+                           'application'
+
+
+To make a release, you need
 
 Known issues
 ------------
