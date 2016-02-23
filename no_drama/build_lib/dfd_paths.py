@@ -12,6 +12,7 @@ paths = {'environment': 'environment.json',
          'extended_python_path': '../../lib',
          'static_out': 'static',
          'update_symlink': '../../current',
+         'extended_wsgi':'extended.wsgi',
          }
 
 if os.path.exists(path_file_path):
@@ -33,3 +34,4 @@ static_in = abs_path('static_in')
 static_out = abs_path('static_out')
 extended_python_path = abs_path('extended_python_path')
 update_symlink = abs_path('update_symlink')
+extended_wsgi = abs_path('extended_wsgi')
