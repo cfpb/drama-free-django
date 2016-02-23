@@ -32,15 +32,6 @@ def save_wheels(destination, packages=[], requirements_file=None):
     subprocess.call(call_list)
 
 
-def get_file_from_dir(dir, filename, mode='r'):
-    full_path = os.path.join(dir, filename)
-    return open(full_path, mode)
-
-
-def get_template(filename, mode='r'):
-    template_file = get_file_from_dir(templates_dir, filename, mode=mode)
-    return Template(template_file.read())
-
 def stage_bundle(cli_args):
     staging_dir = tempfile.mkdtemp()
     build_dir = os.path.join(staging_dir, cli_args.label)
@@ -67,11 +58,15 @@ def stage_bundle(cli_args):
     shutil.copytree(build_lib, destination_lib)
 
     # generate the activate.sh file
-    mkv_template = get_template('activate.sh.template')
-    mkv_code = mkv_template.substitute(projectslug=project_slug)
-    mkv_destination = os.path.join(build_dir,'activate.sh')
-    with open(mkv_destination, 'wb') as mkv_outfile:
-        mkv_outfile.write(mkv_code)
+    activate_template_path = os.path.join(templates_dir,
+                                          'activate.sh.template')
+    with open(activate_template_path) as activate_template_file:
+        activate_template = Template(activate_template_file.read())
+        activate_code = activate_template.substitute(projectslug=project_slug)
+
+    activate_destination = os.path.join(build_dir, 'activate.sh')
+    with open(activate_destination, 'wb') as activate_sh:
+        activate_sh.write(activate_code)
 
     wsgi_source = os.path.join(build_files, 'wsgi.py')
     wsgi_destination = os.path.join(build_dir, 'wsgi.py')
