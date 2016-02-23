@@ -158,7 +158,7 @@ Open source licensing info
 --------------------------
 
 1. `TERMS <TERMS.md>`__
-2. LICENSE
+2. `LICENSE <LICENSE>`__
 3. `CFPB Source Code
    Policy <https://github.com/cfpb/source-code-policy/>`__
 
