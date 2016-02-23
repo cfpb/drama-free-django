@@ -112,7 +112,7 @@ While you wait, a new virtualenv will be created, static files will be collected
 
 Afterwards, you may want to run 'django-admin migrate' to update your database, and make sure the permissions allow your server to access all of the release files.
 
-Web server configuration.
+Web server configuration
 ----- 
 
 It's impossible to describe every deployment scenario, but at minimum, you must:
