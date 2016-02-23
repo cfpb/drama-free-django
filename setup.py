@@ -5,5 +5,10 @@ setup(
     name = "drama-free-django",
     version = "0.1",
     packages = find_packages(),
-    include_package_data = True
+    include_package_data = True,
+    entry_points={
+        'console_scripts':[
+            'no-drama=no_drama.__main__:main'
+            ]
+        }
 )
