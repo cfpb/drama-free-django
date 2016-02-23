@@ -1,5 +1,6 @@
 import os
 
+import sitecustomize
 import dfd_paths
 
 from django.core.servers.basehttp import get_internal_wsgi_application
