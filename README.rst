@@ -1,7 +1,7 @@
 Drama-free Django
 =============
 
-This project aims to make Django projects easy to deploy. It provides a command-line tool for bundling your project and it's dependencies into a zip file (called a "build") and injecting environment-specific configuration (called a "release"). These definitions of "build" and "release" are inspired by chapter 5 of The Twelve Factor App: 
+This project aims to make Django projects easy to deploy. It provides a command-line tool for bundling your project and it's dependencies into a zip file (called a "build") and later modifying the build to insert environment-specific configuration (called a "release"). These definitions of "build" and "release" are inspired by chapter 5 of The Twelve Factor App: 
 
 http://12factor.net/build-release-run
 
@@ -13,19 +13,28 @@ This has only been tested on 64-bit Linux, with Python 2.7. The system that gene
 Installation
 ------------
 
-Detailed instructions on how to install, configure, and get the project
-running. This should be frequently tested to ensure reliability.
-Alternatively, link to a separate `INSTALL <INSTALL.md>`__ document.
+This package isn't in PyPI yet-- in the meantime, you should be able to install it with:::
 
-Configuration
--------------
+   pip install git+https://github.com/cfpb/drama-free-django.git
 
-If the software is configurable, describe it in detail, either here or
-in other documentation to which you link.
 
-Usage
+Make a build
 -----
 
+Like this::
+
+   bash@:~$ no-drama build --help
+   usage: no-drama build [-h] project_path requirements_file name label
+
+   positional arguments:
+     project_path
+     requirements_file  just like you would 'pip install -r'
+     name               name of this project
+     label              a label for this build-- maybe a build ID or version number
+
+   optional arguments:
+     -h, --help         show this help message and exit
+  
 Show users how to use the software. Be specific. Use appropriate
 formatting when showing code snippets.
 
