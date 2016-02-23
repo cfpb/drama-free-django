@@ -3,7 +3,7 @@ import dfd_paths
 
 real_settings = os.environ.get('REAL_DJANGO_SETTINGS')
 
-if real_settings is not None:
+if real_settings:
     exec("from %s  import *" % real_settings)
 
 else:
