@@ -10,6 +10,8 @@ Dependencies
 
 This has only been tested on 64-bit Linux, with Python 2.7. The system that generates builds needs to have 'pip' and 'wheel' installed, and whatever else is needed to build your Python dependencies. Servers you deploy to must only have a Python 2.7 interpreter, and a daemon that can run WSGI apps, like Apache with mod_wsgi.
 
+It's recommended that you use a recent version of pip, since its built-in caching speeds things up quite a bit.
+
 Installation
 ------------
 
