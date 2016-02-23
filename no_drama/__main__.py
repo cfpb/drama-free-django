@@ -21,12 +21,11 @@ build_lib = os.path.join(this_directory, 'build_lib')
 build_files = os.path.join(this_directory, 'build_files')
 
 
-def save_wheels(destination, packages=None, requirements_file=None,
+def save_wheels(destination, packages=[], requirements_file=None,
                 find_links=None):
     call_list = ["pip", "wheel", "--wheel-dir=%s" % destination]
 
-    if packages is not None:
-        call_list += packages
+    call_list += packages
 
     if find_links is not None:
         call_list += ['--find-links=%s' % find_links]
