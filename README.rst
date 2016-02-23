@@ -90,7 +90,7 @@ the file generated from the above will be::
 Deploy a release
 ----- 
 
-A release is not very opinionated about where exactly it sits on the filesystem, thought does have some built-in assumptions that are worth explaining. The most interesting, is that it expects to be two levels below whatever directory you've devoted to the project.
+A release is not very opinionated about where exactly it sits on the filesystem, though it does have some built-in assumptions that are worth explaining. The most interesting, is that it expects to be two levels below whatever directory you've devoted to the project.
 
 In other words, it anticipates a file layout like this::
 
