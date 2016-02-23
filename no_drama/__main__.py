@@ -102,8 +102,10 @@ def inject_configuration(cli_args):
     build_zip = zipfile.ZipFile(build_zip_path, mode="a")
 
     # figuring out where things are in this zip file...
-    zip_wheel_dir = fnmatch.filter(build_zip.namelist(), '*/wheels/')[0]
-    zip_root = zip_wheel_dir[:-7] # dirrrtty
+    zip_wheels =fnmatch.filter(zz.namelist(), '*/wheels/*')
+    some_wheel = zip_wheels[0]
+    zip_wheel_dir = os.path.dirname(some_wheel)
+    zip_root = os.path.normpath(os.path.join(zip_wheel_dir, '../'))
 
     # move just the wheels we want into the bundle dir
     wheel_destination = os.path.join(staging_dir, 'wheels')
