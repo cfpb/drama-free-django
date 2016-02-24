@@ -120,7 +120,7 @@ Web server configuration
 It's impossible to describe every deployment scenario, but at minimum, you must:
 
 - configure your WSGI server to use the file at current/wsgi.py, and include current/venv/lib/python2.7/site-packages
-- Alias /static/ (or whatever value your using for STATIC_URL) to current/static
+- Alias /static/ (or whatever value you are using for STATIC_URL) to current/static
 
 On RHEL6, with Apache+mod_wsgi (via software collections) in daemon mode, this might look like::
 
