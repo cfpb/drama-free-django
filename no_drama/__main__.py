@@ -9,16 +9,12 @@ import subprocess
 import zipfile
 import glob
 import fnmatch
-
-from string import Template
-from functools import partial
+import json
 
 
 this_file = os.path.realpath(__file__)
 this_directory = os.path.dirname(this_file)
-templates_dir = os.path.join(this_directory, 'templates')
-build_lib = os.path.join(this_directory, 'build_lib')
-build_files = os.path.join(this_directory, 'build_files')
+build_skel = os.path.join(this_directory, 'build_skel')
 
 
 def save_wheels(destination, packages=[], requirements_file=None):
@@ -35,6 +31,8 @@ def save_wheels(destination, packages=[], requirements_file=None):
 def stage_bundle(cli_args):
     staging_dir = tempfile.mkdtemp()
     build_dir = os.path.join(staging_dir, cli_args.label)
+
+    shutil.copytree(build_skel, build_dir)
 
     # these are wheels needed during activation
     bootstrap_wheels = ['virtualenv','pip','wheel','distribute']
@@ -53,24 +51,12 @@ def stage_bundle(cli_args):
     project_destination = os.path.join(build_dir, project_slug)
     shutil.copytree(cli_args.project_path, project_destination)
 
-    # make the lib directory
-    destination_lib = os.path.join(build_dir, 'lib')
-    shutil.copytree(build_lib, destination_lib)
+    # install paths.d/0_build.json, so activate.sh can find the django_root
+    paths_d = os.path.join(build_dir, 'paths.d')
+    release_paths_path = os.path.join(paths_d, '0_build.json')
 
-    # generate the activate.sh file
-    activate_template_path = os.path.join(templates_dir,
-                                          'activate.sh.template')
-    with open(activate_template_path) as activate_template_file:
-        activate_template = Template(activate_template_file.read())
-        activate_code = activate_template.substitute(projectslug=project_slug)
-
-    activate_destination = os.path.join(build_dir, 'activate.sh')
-    with open(activate_destination, 'wb') as activate_sh:
-        activate_sh.write(activate_code)
-
-    wsgi_source = os.path.join(build_files, 'wsgi.py')
-    wsgi_destination = os.path.join(build_dir, 'wsgi.py')
-    shutil.copyfile(wsgi_source, wsgi_destination)
+    with open(release_paths_path):
+        json.dump({'django_root':project_slug})
 
     archive_basename = "%s_%s" % (cli_args.name, cli_args.label)
     archive_name = shutil.make_archive(archive_basename,
@@ -114,9 +100,13 @@ def inject_configuration(cli_args):
     if cli_args.paths:
         build_zip.write(cli_args.paths, os.path.join(zip_root, 'paths.json'))
 
+    if cli_args.prepend_wsgi:
+        build_zip.write(cli_args.append_wsgi,
+                        os.path.join(zip_root, 'pre-wsgi.py-fragment'))
+
     if cli_args.append_wsgi:
         build_zip.write(cli_args.append_wsgi,
-                        os.path.join(zip_root, 'extended.wsgi'))
+                        os.path.join(zip_root, 'pre-wsgi.py-fragment'))
 
     build_zip.close()
     build_filename = os.path.basename(cli_args.build_zip)
@@ -155,6 +145,11 @@ def main():
                                 " default paths")
     release_parser.add_argument('--requirements_file', help="just like you would"
                         " 'pip install -r'. Let's you add more wheels to the build")
+
+    release_parser.add_argument('--prepend-wsgi',
+                        help="text file w/ additional python code to modify "
+                             "the environment before the wsgi 'application' is"
+                             " created")
 
     release_parser.add_argument('--append-wsgi',
                         help="text file w/ additional python code to modify "
