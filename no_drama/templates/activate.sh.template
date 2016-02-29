@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "$${BASH_SOURCE[0]}" )" && pwd )"
 FILES=$DIR/bootstrap_wheels/*.whl
 for f in $$FILES
 do
@@ -8,13 +8,13 @@ do
   export PYTHONPATH=$${PYTHONPATH}:$${f}
 done
 
-python -m virtualenv --no-pip --no-wheel --no-setuptools $DIR/empty_venv
-python -m virtualenv --extra-search-dir=bootstrap_wheels $DIR/venv
+python -m virtualenv --no-pip --no-wheel --no-setuptools $$DIR/empty_venv
+python -m virtualenv --extra-search-dir=bootstrap_wheels $$DIR/venv
 
-SITE_PACKAGES=`find $DIR/venv -name 'site-packages'`
+SITE_PACKAGES=`find $$DIR/venv -name 'site-packages'`
 echo '../../../../lib'>$$SITE_PACKAGES/no_drama.pth
 echo '../../../../$projectslug'>>$$SITE_PACKAGES/no_drama.pth
 
-$DIR/venv/bin/pip install wheels/*.whl
-$DIR/venv/bin/django-admin collectstatic --noinput
-$DIR/venv/bin/python -m activate_phase2
+$$DIR/venv/bin/pip install wheels/*.whl
+$$DIR/venv/bin/django-admin collectstatic --noinput
+$$DIR/venv/bin/python -m activate_phase2
