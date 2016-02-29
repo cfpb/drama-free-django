@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR="$$( cd "$( dirname "$${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$$( cd "$$( dirname "$${BASH_SOURCE[0]}" )" && pwd )"
 FILES=$DIR/bootstrap_wheels/*.whl
 for f in $$FILES
 do
