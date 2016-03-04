@@ -16,5 +16,5 @@ echo '../../../../lib'>$$SITE_PACKAGES/no_drama.pth
 echo '../../../../$projectslug'>>$$SITE_PACKAGES/no_drama.pth
 
 $$DIR/venv/bin/wheel install wheels/*.whl --force  # this might be a terrible idea
-$$DIR/venv/bin/django-admin collectstatic --noinput
+$$DIR/venv/bin/django-admin.py collectstatic --noinput
 $$DIR/venv/bin/python -m activate_phase2
