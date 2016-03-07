@@ -15,6 +15,6 @@ SITE_PACKAGES=`find $DIR/venv -name 'site-packages'`
 echo `$DIR/venv/bin/python $DIR/lib/dfd.py build_lib`>$SITE_PACKAGES/no_drama.pth
 echo `$DIR/venv/bin/python $DIR/lib/dfd.py django_root`>>$SITE_PACKAGES/no_drama.pth
 
-$DIR/venv/bin/wheel install wheels/*.whl --force
+$DIR/venv/bin/wheel install $DIR/wheels/*.whl --force
 $DIR/venv/bin/django-admin.py collectstatic --noinput
 $DIR/venv/bin/python -m activate_phase2
