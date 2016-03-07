@@ -1,5 +1,5 @@
 import os
-import dfd_paths
+import dfd
 
 real_settings = os.environ.get('REAL_DJANGO_SETTINGS')
 
@@ -11,10 +11,12 @@ else:
 
 DEBUG = False
 
-if os.path.exists(dfd_paths.static_in):
-    if 'STATICFILES_DIRS' in locals():
-        STATICFILES_DIRS.append(dfd_paths.static_in)
-    else:
-        STATICFILES_DIRS = [dfd_paths.static_in]
+static_in = dfd.get_path('static_in')
 
-STATIC_ROOT = dfd_paths.static_out
+if static_in and os.path.exists(dfd.static_in):
+    if 'STATICFILES_DIRS' in locals():
+        STATICFILES_DIRS.append(dfd.static_in)
+    else:
+        STATICFILES_DIRS = [dfd.static_in]
+
+STATIC_ROOT = dfd.static_out

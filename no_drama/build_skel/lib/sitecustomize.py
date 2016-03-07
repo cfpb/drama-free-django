@@ -1,10 +1,12 @@
 import os
 import json
 
-import dfd_paths
+import dfd
 
-if os.path.exists(dfd_paths.environment):
-    with open(dfd_paths.environment) as env_file:
+environment_path = dfd.get_path('environment')
+
+if os.path.exists(environment_path):
+    with open(environment_path) as env_file:
         new_env_vars = json.load(env_file)
         os.environ.update(new_env_vars)
 
