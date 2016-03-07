@@ -55,8 +55,8 @@ def stage_bundle(cli_args):
     paths_d = os.path.join(build_dir, 'paths.d')
     release_paths_path = os.path.join(paths_d, '0_build.json')
 
-    with open(release_paths_path):
-        json.dump({'django_root':project_slug})
+    with open(release_paths_path, 'wb') as release_paths:
+        json.dump({'django_root':project_slug}, release_paths)
 
     archive_basename = "%s_%s" % (cli_args.name, cli_args.label)
     archive_name = shutil.make_archive(archive_basename,
