@@ -71,8 +71,8 @@ def stage_bundle(cli_args):
                 slug = os.path.basename(norm_path)
                 src = aux_spec
 
-        destination = os.path.join(aux_root, slug)
-        shutil.copytree(src, destination)
+            destination = os.path.join(aux_root, slug)
+            shutil.copytree(src, destination)
 
     archive_basename = "%s_%s" % (cli_args.name, cli_args.label)
     archive_name = shutil.make_archive(archive_basename,
