@@ -12,11 +12,12 @@ else:
 DEBUG = False
 
 static_in = dfd.get_path('static_in')
+static_out = dfd.get_path('static_out')
 
-if static_in and os.path.exists(dfd.static_in):
+if static_in and os.path.exists(static_in):
     if 'STATICFILES_DIRS' in locals():
-        STATICFILES_DIRS.append(dfd.static_in)
+        STATICFILES_DIRS.append(static_in)
     else:
-        STATICFILES_DIRS = [dfd.static_in]
+        STATICFILES_DIRS = [static_in]
 
-STATIC_ROOT = dfd.static_out
+STATIC_ROOT = static_out

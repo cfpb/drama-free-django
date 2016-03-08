@@ -1,1 +1,1 @@
-global-include *.py *.sh *.template
+global-include *.py *.sh *.gitkeep
