@@ -18,6 +18,7 @@ paths = {'environment': 'environment.json',
          'pre_wsgi': 'pre-wsgi.py-fragment',
          'post_wsgi': 'post-wsgi.py-fragment',
          'build_lib': 'lib',
+         'aux':'aux',
          'root':'.'
          }
 

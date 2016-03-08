@@ -53,10 +53,26 @@ def stage_bundle(cli_args):
 
     # install paths.d/0_build.json, so activate.sh can find the django_root
     paths_d = os.path.join(build_dir, 'paths.d')
-    release_paths_path = os.path.join(paths_d, '0_build.json')
+    initial_paths_path = os.path.join(paths_d, '0_build.json')
 
-    with open(release_paths_path, 'wb') as release_paths:
-        json.dump({'django_root':project_slug}, release_paths)
+    with open(initial_paths_path, 'wb') as initial_paths_file:
+        json.dump({'django_root': project_slug}, initial_paths_file)
+
+    if cli_args.aux:
+        aux_root = os.path.join(build_dir, 'aux')
+        for aux_spec in cli_args.aux:
+            if '=' in aux_spec:
+                slug, src = aux_spec.split('=')
+            else:
+                # normalize the path, so that it  will not end in a /
+                # required for basename to get the last path component
+                # would auth_path.split('/')[-1] be simpler? maybe.
+                norm_path = os.path.normpath(aux_spec)
+                slug = os.path.basename(norm_path)
+                src = aux_spec
+
+        destination = os.path.join(aux_root, slug)
+        shutil.copytree(src, destination)
 
     archive_basename = "%s_%s" % (cli_args.name, cli_args.label)
     archive_name = shutil.make_archive(archive_basename,
@@ -131,7 +147,11 @@ def main():
     build_parser.add_argument('name', help="name of this project")
 
     build_parser.add_argument('label', help="a label for this build-- "
-                        "maybe a build ID or version number")
+                              "maybe a build ID or version number")
+
+    build_parser.add_argument('--aux', action='append',
+                              help='extra directories to include, in form'
+                              ' name=/path/to/dir.')
 
     build_parser.set_defaults(func=stage_bundle)
 
