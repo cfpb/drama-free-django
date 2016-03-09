@@ -129,6 +129,8 @@ def inject_configuration(cli_args):
     name, ext = os.path.splitext(build_filename)
     release_filename = "%s_%s%s" % (name, cli_args.slug, ext)
     shutil.copyfile(build_zip_path, release_filename)
+    shutil.rmtree(staging_dir)
+    print("deleted temporary files")
 
 
 def main():
