@@ -72,8 +72,8 @@ def stage_bundle(cli_args):
                 slug = os.path.basename(norm_path)
                 src = aux_spec
 
-        destination = os.path.join(aux_root, slug)
-        shutil.copytree(src, destination)
+            destination = os.path.join(aux_root, slug)
+            shutil.copytree(src, destination)
 
     archive_basename = "_%s_%s" % (cli_args.name, cli_args.label)
     archive_name = shutil.make_archive(archive_basename,
@@ -146,6 +146,8 @@ def inject_configuration(cli_args):
     name, ext = os.path.splitext(build_filename)
     release_filename = "%s_%s%s" % (name, cli_args.slug, ext)
     shutil.copyfile(build_zip_path, release_filename)
+    shutil.rmtree(staging_dir)
+    print("deleted temporary files")
 
 
 def main():
