@@ -4,6 +4,7 @@ import argparse
 import tempfile
 import os
 import os.path
+import stat
 import shutil
 import subprocess
 import zipfile
@@ -74,13 +75,29 @@ def stage_bundle(cli_args):
         destination = os.path.join(aux_root, slug)
         shutil.copytree(src, destination)
 
-    archive_basename = "%s_%s" % (cli_args.name, cli_args.label)
+    archive_basename = "_%s_%s" % (cli_args.name, cli_args.label)
     archive_name = shutil.make_archive(archive_basename,
                                        'zip',
                                        root_dir=staging_dir,
                                        base_dir=cli_args.label)
 
-    print("generated build at %s" % archive_name)
+    build_zip = zipfile.ZipFile(archive_name, 'a')
+
+    build_zip.writestr('__main__.py', self_extraction_script % cli_args.label)
+    build_zip.close()
+
+    executable_preamble = "#!/usr/bin/env python\n"
+
+    executable_path = os.path.join(os.getcwd(),archive_basename[1:]+'.zip')
+    with open(executable_path, 'wb') as executable_file:
+        executable_file.write(executable_preamble)
+        executable_file.write(open(archive_name).read())
+
+    exe_permissions = os.stat(executable_path)[0]
+    new_permissions = exe_permissions | stat.S_IXOTH | stat.S_IXGRP | stat.S_IXUSR
+    os.chmod(executable_path, new_permissions)
+    os.unlink(archive_name)
+    print("generated build at %s" % executable_path)
     shutil.rmtree(staging_dir)
     print("deleted temporary files")
 
@@ -179,6 +196,29 @@ def main():
 
     args = parser.parse_args()
     args.func(args)
+
+self_extraction_script = """
+import os
+import zipfile
+import subprocess
+
+prefix = '%s'
+
+zip_path= os.path.join(os.getcwd(),__loader__.archive)
+destination = os.path.dirname(zip_path)
+bundle = zipfile.ZipFile(zip_path)
+
+os.chdir(destination)
+for member in bundle.infolist():
+    filename = member.filename
+    if filename.startswith(prefix) and not filename.endswith('/'):
+        bundle.extract(member)
+
+bundle_dir = os.path.join(destination,prefix)
+activate_script = os.path.join(bundle_dir, 'activate.sh')
+
+subprocess.call(['sh',activate_script])
+"""
 
 if __name__ == '__main__':
     main()
