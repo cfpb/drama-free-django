@@ -19,13 +19,18 @@ build_skel = os.path.join(this_directory, 'build_skel')
 
 
 def save_wheels(destination, packages=[], requirements_file=None):
-    call_list = ["pip", "wheel", "--wheel-dir=%s" % destination]
+    cache_arguments_list = ["pip", "wheel", "--wheel-dir=wheel_cache"]
+    call_list = ["pip", "wheel", "--find-links=wheel_cache", "--wheel-dir=%s" % destination]
 
     call_list += packages
+    cache_arguments_list += packages
 
     if requirements_file is not None:
+        cache_arguments_list += ['-r', requirements_file]
         call_list += ['-r', requirements_file]
 
+ 
+    subprocess.call(cache_arguments_list)
     subprocess.call(call_list)
 
 
