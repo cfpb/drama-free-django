@@ -41,7 +41,6 @@ def wheels_for_requirements(requirements_path, destination):
                                     )
 
     cache = zipfile.ZipFile(cache_zip_path)
-    import pdb;pdb.set_trace()
     cache.extractall(destination)
 
 def save_wheels(destination, packages=[], requirements_file=None):
