@@ -13,28 +13,39 @@ import fnmatch
 import json
 import hashlib
 
+from itertools import chain
 
 this_file = os.path.realpath(__file__)
 this_directory = os.path.dirname(this_file)
 build_skel = os.path.join(this_directory, 'build_skel')
 
 
-def hash_for_path(path):
+def expand_globs(globs_or_not):
+    return chain(*[glob.glob(x) for x in globs_or_not])
+
+
+def hash_for_paths(paths):
     hasher = hashlib.sha1()
-    with open(path, 'rb') as afile:
-        buf = afile.read()
-        hasher.update(buf)
-        return hasher.hexdigest()
+    for path in paths:
+        with open(path, 'rb') as afile:
+            buf = afile.read()
+            hasher.update(buf)
+    return hasher.hexdigest()
 
 
-def wheels_for_requirements(requirements_path, destination):
-    hash = hash_for_path(requirements_path)
+def wheels_for_requirements(requirements_paths, destination):
+    paths = expand_globs(requirements_paths)
+    hash = hash_for_paths(paths)
+
+    # rewind the paths iterator
+    paths = expand_globs(requirements_paths)
+
     cache_zip_base = 'requirements_cache/%s' % hash
     cache_zip_path = cache_zip_base + ".zip"
 
     if not os.path.exists(cache_zip_path):
         wheel_dir = tempfile.mkdtemp()
-        save_wheels(wheel_dir, requirements_file=requirements_path)
+        save_wheels(wheel_dir, requirements_paths=paths)
         cache = shutil.make_archive(cache_zip_base,
                                     'zip',
                                     root_dir=wheel_dir,
@@ -43,13 +54,13 @@ def wheels_for_requirements(requirements_path, destination):
     cache = zipfile.ZipFile(cache_zip_path)
     cache.extractall(destination)
 
-def save_wheels(destination, packages=[], requirements_file=None):
+def save_wheels(destination, packages=[], requirements_paths=[]):
     call_list = ["pip", "wheel", "--wheel-dir=%s" % destination]
 
     call_list += packages
 
-    if requirements_file is not None:
-        call_list += ['-r', requirements_file]
+    for path in requirements_paths:
+        call_list += ['-r', path]
 
     subprocess.call(call_list)
 
@@ -67,8 +78,8 @@ def stage_bundle(cli_args):
 
     # move just the wheels we want into the bundle dir  
     wheel_destination = os.path.join(build_dir, 'wheels')
-    for requirements_file in cli_args.r:
-        wheels_for_requirements(requirements_file,
+    if cli_args.r:
+        wheels_for_requirements(cli_args.r,
                 destination= wheel_destination)
 
     # copy django project into bundle dir
