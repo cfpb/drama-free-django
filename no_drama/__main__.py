@@ -29,18 +29,19 @@ def hash_for_path(path):
 
 def wheels_for_requirements(requirements_path, destination):
     hash = hash_for_path(requirements_path)
-    wheel_cache_base = 'requirements_cache/%s' % hash
+    cache_zip_base = 'requirements_cache/%s' % hash
+    cache_zip_path = cache_zip_base + ".zip"
 
-    if not os.path.exists(wheel_cache_base + '.zip'):
+    if not os.path.exists(cache_zip_path):
         wheel_dir = tempfile.mkdtemp()
-        save_wheels(wheel_dir, requirements_path)
-        cache = shutil.make_archive(wheel_cache_base,
+        save_wheels(wheel_dir, requirements_file=requirements_path)
+        cache = shutil.make_archive(cache_zip_base,
                                     'zip',
                                     root_dir=wheel_dir,
-                                    base_dir=wheel_dir
                                     )
 
-    cache = zipfile.ZipFile(wheel_cache_base + '.zip')
+    cache = zipfile.ZipFile(cache_zip_path)
+    import pdb;pdb.set_trace()
     cache.extractall(destination)
 
 def save_wheels(destination, packages=[], requirements_file=None):
