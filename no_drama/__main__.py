@@ -11,6 +11,7 @@ import zipfile
 import glob
 import fnmatch
 import json
+import hashlib
 
 
 this_file = os.path.realpath(__file__)
@@ -18,8 +19,32 @@ this_directory = os.path.dirname(this_file)
 build_skel = os.path.join(this_directory, 'build_skel')
 
 
+def hash_for_path(path):
+    hasher = hashlib.sha1()
+    with open(path, 'rb') as afile:
+        buf = afile.read()
+        hasher.update(buf)
+        return hasher.hexdigest()
+
+
+def wheels_for_requirements(requirements_path, destination):
+    hash = hash_for_path(requirements_path)
+    wheel_cache_base = 'requirements_cache/%s' % hash
+
+    if not os.path.exists(wheel_cache_base + '.zip'):
+        wheel_dir = tempfile.mkdtemp()
+        save_wheels(wheel_dir, requirements_path)
+        cache = shutil.make_archive(wheel_cache_base,
+                                    'zip',
+                                    root_dir=wheel_dir,
+                                    base_dir=wheel_dir
+                                    )
+
+    cache = zipfile.ZipFile(wheel_cache_base + '.zip')
+    cache.extractall(destination)
+
 def save_wheels(destination, packages=[], requirements_file=None):
-    call_list = ["pip", "wheel", "--find-links=wheel_cache", "--wheel-dir=%s" % destination]
+    call_list = ["pip", "wheel", "--wheel-dir=%s" % destination]
 
     call_list += packages
 
@@ -42,8 +67,9 @@ def stage_bundle(cli_args):
 
     # move just the wheels we want into the bundle dir  
     wheel_destination = os.path.join(build_dir, 'wheels')
-    save_wheels(requirements_file = cli_args.requirements_file,
-            destination= wheel_destination)
+    for requirements_file in cli_args.r:
+        wheels_for_requirements(requirements_file,
+                destination= wheel_destination)
 
     # copy django project into bundle dir
     project_complete_path = os.path.join(os.getcwd(), cli_args.project_path)
@@ -160,13 +186,14 @@ def main():
 
     # build parser arguments
     build_parser.add_argument('project_path')
-    build_parser.add_argument('requirements_file', help="just like you would"
-                              " 'pip install -r'")
 
     build_parser.add_argument('name', help="name of this project")
 
     build_parser.add_argument('label', help="a label for this build-- "
                               "maybe a build ID or version number")
+
+    build_parser.add_argument('-r', action='append', help="just like you would"
+                              " 'pip install -r'")
 
     build_parser.add_argument('--aux', action='append',
                               help='extra directories to include, in form'
