@@ -12,6 +12,7 @@ root = os.path.realpath(os.path.join(this_dir, '../'))
 
 paths = {'environment': 'environment.json',
          'static_in': '../../static.in',
+         'build_static_in' : 'static.in',
          'extended_python_path': '../../lib',
          'static_out': 'static',
          'update_symlink': '../../current',

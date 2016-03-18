@@ -96,6 +96,10 @@ def stage_bundle(cli_args):
     with open(initial_paths_path, 'wb') as initial_paths_file:
         json.dump({'django_root': project_slug}, initial_paths_file)
 
+    for index,path in enumerate(cli_args.static):
+        destination = os.path.join(build_dir, 'static.in/%s/' % index)
+        shutil.copytree(path,destination )
+
     if cli_args.aux:
         aux_root = os.path.join(build_dir, 'aux')
         for aux_spec in cli_args.aux:
@@ -209,6 +213,10 @@ def main():
     build_parser.add_argument('--aux', action='append',
                               help='extra directories to include, in form'
                               ' name=/path/to/dir.')
+
+    build_parser.add_argument('--static', action='append',
+                              help='extra directories to include in static files'
+                              'to be served from STATIC_ROOT')
 
     build_parser.set_defaults(func=stage_bundle)
 
