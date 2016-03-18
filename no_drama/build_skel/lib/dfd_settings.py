@@ -9,11 +9,15 @@ if real_settings:
 else:
     raise ImportError
 
-DEBUG = False
+
 
 static_in = dfd.get_path('static_in')
 build_static_in = dfd.get_path('build_static_in')
 static_out = dfd.get_path('static_out')
+debug_if_exists_path = dfd.get_path('debug_if_exists')
+
+
+DEBUG = os.path.exists(debug_if_exists_path)
 
 
 EXTENDED_STATICFILES_DIRS = []
