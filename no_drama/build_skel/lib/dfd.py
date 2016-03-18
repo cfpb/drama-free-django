@@ -17,6 +17,7 @@ paths = {'environment': 'environment.json',
          'static_out': 'static',
          'update_symlink': '../../current',
          'debug_if_exists': '../../DEBUG',
+         'secret_key':'../../SECRET_KEY',
          'pre_wsgi': 'pre-wsgi.py-fragment',
          'post_wsgi': 'post-wsgi.py-fragment',
          'build_lib': 'lib',
@@ -41,6 +42,11 @@ def get_path(name):
         return os.path.normpath(joined)
     else:
         raise KeyError('no path found for %s' % name)
+
+def get_path_if_exists(name):
+    path = get_path(name)
+    if os.path.exists(path):
+        return path
 
 
 if __name__ == '__main__':
