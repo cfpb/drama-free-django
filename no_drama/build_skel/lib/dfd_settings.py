@@ -14,11 +14,14 @@ else:
 static_in = dfd.get_path('static_in')
 build_static_in = dfd.get_path('build_static_in')
 static_out = dfd.get_path('static_out')
-debug_if_exists_path = dfd.get_path('debug_if_exists')
+secret_key_path = dfd.get_path_if_exists('secret_key')
 
 
-DEBUG = os.path.exists(debug_if_exists_path)
+DEBUG = bool(dfd.get_path_if_exists('debug_if_exists'))
 
+if secret_key_path:
+    with open(secret_key_path) as secret_key_file:
+        SECRET_KEY=secret_key_file.read()
 
 EXTENDED_STATICFILES_DIRS = []
 
