@@ -32,7 +32,7 @@ def hash_for_path(path):
     return hasher.hexdigest()
 
 def cache_marker_for_path(path):
-    hash = hash_for_path
+    req_hash = hash_for_path(path)
     return 'requirements_hashes/%s' % hash
 
 def is_cache_update_required(path):
