@@ -37,7 +37,7 @@ def cache_marker_for_path(path):
 
 def is_cache_update_required(path):
     marker_path = cache_marker_for_path(path)
-    return os.path_exists(marker_path)
+    return os.path.exists(marker_path)
     
 def record_req_cached(path):
     marker_path = cache_marker_for_path(path)
