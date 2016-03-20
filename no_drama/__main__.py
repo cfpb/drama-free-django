@@ -42,7 +42,7 @@ def save_wheels(destination, packages=[], requirements_paths=[]):
     for path in requirements_paths:
         to_install += ['-r', path]
 
-    subprocess.call(cache_wheels_prefix + to_install)
+    subprocess.call(cache_wheel_command_prefix + to_install)
     subprocess.call(save_wheel_command_prefix + to_install)
 
 
