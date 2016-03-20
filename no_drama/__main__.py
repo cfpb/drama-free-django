@@ -33,36 +33,17 @@ def hash_for_paths(paths):
     return hasher.hexdigest()
 
 
-def wheels_for_requirements(requirements_paths, destination):
-    paths = expand_globs(requirements_paths)
-    hash = hash_for_paths(paths)
-
-    # rewind the paths iterator
-    paths = expand_globs(requirements_paths)
-
-    cache_zip_base = 'requirements_cache/%s' % hash
-    cache_zip_path = cache_zip_base + ".zip"
-
-    if not os.path.exists(cache_zip_path):
-        wheel_dir = tempfile.mkdtemp()
-        save_wheels(wheel_dir, requirements_paths=paths)
-        cache = shutil.make_archive(cache_zip_base,
-                                    'zip',
-                                    root_dir=wheel_dir,
-                                    )
-
-    cache = zipfile.ZipFile(cache_zip_path)
-    cache.extractall(destination)
-
 def save_wheels(destination, packages=[], requirements_paths=[]):
-    call_list = ["pip", "wheel", "--wheel-dir=%s" % destination]
-
-    call_list += packages
+    cache_wheel_command_prefix = "pip wheel --wheel-dir=wheelhouse".split()
+    save_wheel_command_prefix =  ("pip wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
+        
+    to_install =  packages
 
     for path in requirements_paths:
-        call_list += ['-r', path]
+        to_install += ['-r', path]
 
-    subprocess.call(call_list)
+    subprocess.call(cache_wheels_prefix + to_install)
+    subprocess.call(save_wheel_command_prefix + to_install)
 
 
 def stage_bundle(cli_args):
@@ -79,8 +60,7 @@ def stage_bundle(cli_args):
     # move just the wheels we want into the bundle dir  
     wheel_destination = os.path.join(build_dir, 'wheels')
     if cli_args.r:
-        wheels_for_requirements(cli_args.r,
-                destination= wheel_destination)
+        save_wheels(destination= wheel_destination, requirements_paths = cli_args.r)
 
     # copy django project into bundle dir
     project_complete_path = os.path.join(os.getcwd(), cli_args.project_path)
