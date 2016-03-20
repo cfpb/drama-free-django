@@ -60,8 +60,8 @@ def save_wheels(destination, packages=[], requirements_paths=[]):
             requirements_cache_args += [-r,path]
             record_req_cached(path)
 
-    subprocess.call(cache_wheel_command_prefix + packages + to_cache)
-    subprocess.call(save_wheel_command_prefix + requirements_install_args)
+    subprocess.call(cache_wheel_command_prefix + packages + requirements_cache_args)
+    subprocess.call(save_wheel_command_prefix + packages + requirements_install_args)
 
     
 
