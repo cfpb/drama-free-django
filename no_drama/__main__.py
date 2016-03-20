@@ -57,7 +57,7 @@ def save_wheels(destination, packages=[], requirements_paths=[]):
     for path in requirements_paths:
         requirements_install_args += ['-r', path]
         if is_cache_update_required(path):
-            requirements_cache_args += [-r,path]
+            requirements_cache_args += ['-r', path]
             record_req_cached(path)
 
     subprocess.call(cache_wheel_command_prefix + packages + requirements_cache_args)
