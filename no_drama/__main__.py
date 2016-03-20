@@ -33,7 +33,7 @@ def hash_for_path(path):
 
 def cache_marker_for_path(path):
     hash = hash_for_path
-    marker_path = 'requirements_hashes/%s' % hash
+    return 'requirements_hashes/%s' % hash
 
 def is_cache_update_required(path):
     marker_path = cache_marker_for_path(path)
