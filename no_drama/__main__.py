@@ -24,27 +24,46 @@ def expand_globs(globs_or_not):
     return chain(*[glob.glob(x) for x in globs_or_not])
 
 
-def hash_for_paths(paths):
+def hash_for_path(path):
     hasher = hashlib.sha1()
-    for path in paths:
-        with open(path, 'rb') as afile:
-            buf = afile.read()
-            hasher.update(buf)
+    with open(path, 'rb') as afile:
+        buf = afile.read()
+        hasher.update(buf)
     return hasher.hexdigest()
 
+def cache_marker_for_path(path):
+    hash = hash_for_path
+    marker_path = 'requirements_hashes/%s' % hash
+
+def is_cache_update_required(path):
+    marker_path = cache_marker_for_path(path)
+    return os.path_exists(marker_path)
+    
+def record_req_cached(path):
+    marker_path = cache_marker_for_path(path)
+    if not os.path.exists('requirements_hashes'):
+        os.mkdir('requirements_hashes')
+    with open(marker_path,'wb') as marker_file:
+        marker_file.write('')
 
 def save_wheels(destination, packages=[], requirements_paths=[]):
     cache_wheel_command_prefix = "pip wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
     save_wheel_command_prefix =  ("pip wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
-        
-    to_install =  packages
-
+    
+    requirements_install_args =[]
+    requirements_cache_args = []
+    
+    
     for path in requirements_paths:
-        to_install += ['-r', path]
+        requirements_install_args += ['-r', path]
+        if is_cache_update_required(path):
+            to_cache += [-r,path]
+            record_req_cached(path)
 
-    subprocess.call(cache_wheel_command_prefix + to_install)
-    subprocess.call(save_wheel_command_prefix + to_install)
+    subprocess.call(cache_wheel_command_prefix + packages + to_cache)
+    subprocess.call(save_wheel_command_prefix + requirements_install_args)
 
+    
 
 def stage_bundle(cli_args):
     staging_dir = tempfile.mkdtemp()
