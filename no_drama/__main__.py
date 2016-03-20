@@ -34,7 +34,7 @@ def hash_for_paths(paths):
 
 
 def save_wheels(destination, packages=[], requirements_paths=[]):
-    cache_wheel_command_prefix = "pip wheel --wheel-dir=wheelhouse".split()
+    cache_wheel_command_prefix = "pip wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
     save_wheel_command_prefix =  ("pip wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
         
     to_install =  packages
