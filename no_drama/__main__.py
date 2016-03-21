@@ -47,22 +47,23 @@ def record_req_cached(path):
         marker_file.write('')
 
 def save_wheels(destination, packages=[], requirements_paths=[]):
-    cache_wheel_command_prefix = "pip wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
-    save_wheel_command_prefix =  ("pip wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
+    cache_wheel_command_prefix = "python -m pip wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
+    save_wheel_command_prefix =  ("python -m pip wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
     
     requirements_install_args =[]
     requirements_cache_args = []
     
-    
+    record_caches =[]
     for path in requirements_paths:
         requirements_install_args += ['-r', path]
         if is_cache_update_required(path):
             requirements_cache_args += ['-r', path]
-            record_req_cached(path)
+            record_caches.append(path)
 
     subprocess.call(cache_wheel_command_prefix + packages + requirements_cache_args)
     subprocess.call(save_wheel_command_prefix + packages + requirements_install_args)
-
+    for path in record_caches:
+        record_req_cached(path)
     
 
 def stage_bundle(cli_args):
