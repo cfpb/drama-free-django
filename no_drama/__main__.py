@@ -71,6 +71,7 @@ def stage_bundle(cli_args):
     
     if os.path.exists(executable_path) and not cli_args.f:
         print "%s already exists, skipping. Call with -f to force rebuild"
+        return
 
     staging_dir = tempfile.mkdtemp()
     build_dir = os.path.join(staging_dir, cli_args.label)
