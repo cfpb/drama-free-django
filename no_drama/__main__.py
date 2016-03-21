@@ -83,7 +83,7 @@ def stage_bundle(cli_args):
     # these are wheels needed during activation
     bootstrap_wheels = ['virtualenv','pip','wheel','distribute']
     bootstrap_wheels_destination = os.path.join(build_dir,'bootstrap_wheels')
-    save_wheels(packages=bootstrap_wheels, destination=bootstrap_wheels_destination, pip=cli_args.pip)
+    save_wheels(packages=bootstrap_wheels, destination=bootstrap_wheels_destination)
 
     # move just the wheels we want into the bundle dir  
     wheel_destination = os.path.join(build_dir, 'wheels')
@@ -228,8 +228,6 @@ def main():
                               
     build_parser.add_argument('-f', action='store_true', help="ignore if this build already exists")
     
-    build_parser.add_argument('--pip', action='store', default='pip')
-
     build_parser.set_defaults(func=stage_bundle)
 
     # release parser arguments
