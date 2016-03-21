@@ -227,7 +227,7 @@ def main():
                               
     build_parser.add_argument('-f', action='store_true', help="ignore if this build already exists")
     
-    build_parser.add_argument('--pip', action='store', default='pip)
+    build_parser.add_argument('--pip', action='store', default='pip')
 
     build_parser.set_defaults(func=stage_bundle)
 
