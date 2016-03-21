@@ -47,8 +47,8 @@ def record_req_cached(path):
         marker_file.write('')
 
 def save_wheels(destination, packages=[], requirements_paths=[]):
-    cache_wheel_command_prefix = "python -m pip wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
-    save_wheel_command_prefix =  ("python -m pip wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
+    cache_wheel_command_prefix = cli_args.pip + " wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
+    save_wheel_command_prefix =  (cli_args.pip + " wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
     
     requirements_install_args =[]
     requirements_cache_args = []
@@ -226,6 +226,8 @@ def main():
                               'to be served from STATIC_ROOT')
                               
     build_parser.add_argument('-f', action='store_true', help="ignore if this build already exists")
+    
+    build_parser.add_argument('--pip', action='store', default='pip)
 
     build_parser.set_defaults(func=stage_bundle)
 
