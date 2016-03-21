@@ -12,6 +12,7 @@ import glob
 import fnmatch
 import json
 import hashlib
+import pip
 
 from itertools import chain
 
@@ -46,9 +47,9 @@ def record_req_cached(path):
     with open(marker_path,'wb') as marker_file:
         marker_file.write('')
 
-def save_wheels(destination, packages=[], requirements_paths=[], pip='pip'):
-    cache_wheel_command_prefix = pip + " wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
-    save_wheel_command_prefix =  (pip + " wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
+def save_wheels(destination, packages=[], requirements_paths=[]):
+    cache_wheel_command_prefix = "wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
+    save_wheel_command_prefix =  (" wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
     
     requirements_install_args =[]
     requirements_cache_args = []
@@ -60,8 +61,8 @@ def save_wheels(destination, packages=[], requirements_paths=[], pip='pip'):
             requirements_cache_args += ['-r', path]
             record_caches.append(path)
 
-    subprocess.call(cache_wheel_command_prefix + packages + requirements_cache_args)
-    subprocess.call(save_wheel_command_prefix + packages + requirements_install_args)
+    pip.main(cache_wheel_command_prefix + packages + requirements_cache_args)
+    pip.main(save_wheel_command_prefix + packages + requirements_install_args)
     for path in record_caches:
         record_req_cached(path)
     
