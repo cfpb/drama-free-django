@@ -46,9 +46,9 @@ def record_req_cached(path):
     with open(marker_path,'wb') as marker_file:
         marker_file.write('')
 
-def save_wheels(destination, packages=[], requirements_paths=[]):
-    cache_wheel_command_prefix = cli_args.pip + " wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
-    save_wheel_command_prefix =  (cli_args.pip + " wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
+def save_wheels(destination, packages=[], requirements_paths=[], pip='pip'):
+    cache_wheel_command_prefix = pip + " wheel --find-links=wheelhouse --wheel-dir=wheelhouse".split()
+    save_wheel_command_prefix =  (pip + " wheel --find-links=wheelhouse --no-index --wheel-dir=%s" % destination).split()
     
     requirements_install_args =[]
     requirements_cache_args = []
@@ -82,7 +82,7 @@ def stage_bundle(cli_args):
     # these are wheels needed during activation
     bootstrap_wheels = ['virtualenv','pip','wheel','distribute']
     bootstrap_wheels_destination = os.path.join(build_dir,'bootstrap_wheels')
-    save_wheels(packages=bootstrap_wheels, destination=bootstrap_wheels_destination)
+    save_wheels(packages=bootstrap_wheels, destination=bootstrap_wheels_destination, pip=cli_args.pip)
 
     # move just the wheels we want into the bundle dir  
     wheel_destination = os.path.join(build_dir, 'wheels')
