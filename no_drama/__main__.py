@@ -95,9 +95,10 @@ def stage_bundle(cli_args):
     with open(initial_paths_path, 'wb') as initial_paths_file:
         json.dump({'django_root': project_slug}, initial_paths_file)
 
-    for index,path in enumerate(cli_args.static):
-        destination = os.path.join(build_dir, 'static.in/%s/' % index)
-        shutil.copytree(path,destination )
+    if cli_args.static:
+        for index,path in enumerate(cli_args.static):
+            destination = os.path.join(build_dir, 'static.in/%s/' % index)
+            shutil.copytree(path,destination )
 
     if cli_args.aux:
         aux_root = os.path.join(build_dir, 'aux')
