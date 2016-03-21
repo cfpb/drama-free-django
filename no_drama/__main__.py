@@ -127,7 +127,7 @@ def stage_bundle(cli_args):
     build_zip.writestr('__main__.py', self_extraction_script % cli_args.label)
     build_zip.close()
 
-    executable_preamble = "#!/usr/bin/env python\n"
+    executable_preamble = "#!/usr/bin/env python2.7\n"
 
     executable_path = os.path.join(os.getcwd(),archive_basename[1:]+'.zip')
     with open(executable_path, 'wb') as executable_file:
