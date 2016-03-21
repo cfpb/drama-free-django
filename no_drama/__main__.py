@@ -66,6 +66,12 @@ def save_wheels(destination, packages=[], requirements_paths=[]):
     
 
 def stage_bundle(cli_args):
+    archive_basename = "_%s_%s" % (cli_args.name, cli_args.label)
+    executable_path = os.path.join(os.getcwd(),archive_basename[1:]+'.zip')
+    
+    if os.path.exists(executable_path) and not cli_args.f:
+        print "%s already exists, skipping. Call with -f to force rebuild"
+
     staging_dir = tempfile.mkdtemp()
     build_dir = os.path.join(staging_dir, cli_args.label)
 
@@ -116,7 +122,7 @@ def stage_bundle(cli_args):
             destination = os.path.join(aux_root, slug)
             shutil.copytree(src, destination)
 
-    archive_basename = "_%s_%s" % (cli_args.name, cli_args.label)
+    
     archive_name = shutil.make_archive(archive_basename,
                                        'zip',
                                        root_dir=staging_dir,
@@ -129,7 +135,6 @@ def stage_bundle(cli_args):
 
     executable_preamble = "#!/usr/bin/env python2.7\n"
 
-    executable_path = os.path.join(os.getcwd(),archive_basename[1:]+'.zip')
     with open(executable_path, 'wb') as executable_file:
         executable_file.write(executable_preamble)
         executable_file.write(open(archive_name).read())
@@ -217,6 +222,8 @@ def main():
     build_parser.add_argument('--static', action='append',
                               help='extra directories to include in static files'
                               'to be served from STATIC_ROOT')
+                              
+    build_parser.add_argument('-f', action='store_true', help="ignore if this build already exists")
 
     build_parser.set_defaults(func=stage_bundle)
 
