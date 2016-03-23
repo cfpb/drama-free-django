@@ -13,7 +13,7 @@ setup(
         },
     install_requires=[
         'wheel>=0.29.0',
-        'pip>=8.1.0',
+        'pip>=8.1.1',
         'setuptools>=20.2.2',
         ]
 )
