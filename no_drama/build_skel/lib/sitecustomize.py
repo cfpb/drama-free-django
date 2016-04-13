@@ -3,9 +3,14 @@ import json
 
 import dfd
 
-environment_path = dfd.get_path('environment')
+extended_python_path = dfd.get_path_if_exists(extended_python_path')
+environment_path = dfd.get_path_if_exists('environment')
 
-if os.path.exists(environment_path):
+if extended_python_path:
+    import site
+    site.addsitedir(extended_python_path)
+
+if environment_path:
     with open(environment_path) as env_file:
         new_env_vars = json.load(env_file)
 
