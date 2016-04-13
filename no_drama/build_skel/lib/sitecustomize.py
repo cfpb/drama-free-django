@@ -3,7 +3,7 @@ import json
 
 import dfd
 
-extended_python_path = dfd.get_path_if_exists(extended_python_path')
+extended_python_path = dfd.get_path_if_exists('extended_python_path')
 environment_path = dfd.get_path_if_exists('environment')
 
 if extended_python_path:
