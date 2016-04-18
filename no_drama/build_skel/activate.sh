@@ -8,8 +8,8 @@ do
   export PYTHONPATH=${PYTHONPATH}:${f}
 done
 
-python27 -m virtualenv --no-pip --no-wheel --no-setuptools $DIR/empty_venv
-python27 -m virtualenv --extra-search-dir=$DIR/bootstrap_wheels $DIR/venv
+python -m virtualenv --no-pip --no-wheel --no-setuptools $DIR/empty_venv
+python -m virtualenv --extra-search-dir=$DIR/bootstrap_wheels $DIR/venv
 
 SITE_PACKAGES=`find $DIR/venv -name 'site-packages'`
 echo `$DIR/venv/bin/python $DIR/lib/dfd.py build_lib`>$SITE_PACKAGES/no_drama.pth
