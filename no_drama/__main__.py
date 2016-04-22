@@ -128,12 +128,12 @@ def inject_configuration(cli_args):
                     zip_root, 'paths.json'))
 
         if cli_args.prepend_wsgi:
-            build_zip.write(cli_args.append_wsgi,
+            build_zip.write(cli_args.prepend_wsgi,
                             os.path.join(zip_root, 'pre-wsgi.py-fragment'))
 
         if cli_args.append_wsgi:
             build_zip.write(cli_args.append_wsgi,
-                            os.path.join(zip_root, 'pre-wsgi.py-fragment'))
+                            os.path.join(zip_root, 'post-wsgi.py-fragment'))
 
         build_zip.close()
         build_filename = os.path.basename(cli_args.build_zip)
