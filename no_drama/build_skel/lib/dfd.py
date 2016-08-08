@@ -12,18 +12,17 @@ root = os.path.realpath(os.path.join(this_dir, '../'))
 
 paths = {'environment': 'environment.json',
          'static_in': '../../static.in',
-         'build_static_in': 'static.in',
+         'build_static_in' : 'static.in',
          'extended_python_path': '../../lib',
          'static_out': 'static',
          'update_symlink': '../../current',
          'debug_if_exists': '../../DEBUG',
-         'persistent_media_root': '../../MEDIA_ROOT',
-         'secret_key': '../../SECRET_KEY',
+         'secret_key':'../../SECRET_KEY',
          'pre_wsgi': 'pre-wsgi.py-fragment',
          'post_wsgi': 'post-wsgi.py-fragment',
          'build_lib': 'lib',
-         'aux': 'aux',
-         'root': '.'
+         'aux':'aux',
+         'root':'.'
          }
 
 pathfiles_glob = os.path.join(root, 'paths.d/*.json')

@@ -10,11 +10,11 @@ else:
     raise ImportError
 
 
+
 static_in = dfd.get_path('static_in')
 build_static_in = dfd.get_path('build_static_in')
 static_out = dfd.get_path('static_out')
 secret_key_path = dfd.get_path_if_exists('secret_key')
-media_root_path = dfd.get_path_if_exists('persistent_media_root')
 
 
 DEBUG = bool(dfd.get_path_if_exists('debug_if_exists'))
@@ -38,6 +38,3 @@ if EXTENDED_STATICFILES_DIRS:
         STATICFILES_DIRS = EXTENDED_STATICFILES_DIRS
 
 STATIC_ROOT = static_out
-
-if media_root_path:
-    MEDIA_ROOT = media_root_path
