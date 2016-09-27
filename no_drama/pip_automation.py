@@ -6,7 +6,7 @@ import hashlib
 def hash_for_path(path):
     hasher = hashlib.sha1()
     with open(path, 'rb') as afile:
-        buf = afile.read()
+        buf = afile.read().encode('utf-8')
         hasher.update(buf)
     return hasher.hexdigest()
 
