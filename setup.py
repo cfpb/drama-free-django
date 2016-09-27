@@ -9,11 +9,15 @@ setup(
     entry_points={
         'console_scripts':[
             'no-drama=no_drama.__main__:main'
-            ]
-        },
+        ]
+    },
     install_requires=[
         'wheel>=0.29.0',
         'pip>=8.1.1',
         'setuptools>=20.2.2',
-        ]
+    ],
+    tests_require = [
+        'mock',
+    ],
+    test_suite='tests',
 )
