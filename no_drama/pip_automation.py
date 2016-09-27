@@ -45,7 +45,13 @@ def save_wheels(destination, packages=[], requirements_paths=[]):
             requirements_cache_args += ['-r', path]
             record_caches.append(path)
 
-    pip.main(cache_wheel_command_prefix + packages + requirements_cache_args)
-    pip.main(save_wheel_command_prefix + packages + requirements_install_args)
+    status = pip.main(cache_wheel_command_prefix + packages + requirements_cache_args)
+    if status != 0:
+        raise ValueError("non-zero return from pip.main() when caching")
+
+    status = pip.main(save_wheel_command_prefix + packages + requirements_install_args)
+    if status != 0:
+        raise ValueError("non-zero return from pip.main() when installing")
+
     for path in record_caches:
         record_req_cached(path)

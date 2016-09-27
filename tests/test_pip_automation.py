@@ -92,3 +92,25 @@ class TestPipAutomation(unittest.TestCase):
         pip_automation.save_wheels('/bootsrap_wheels', ['some', 'packages'], 
                 ['first.txt', 'second.txt'])
         self.assertEqual(mock_pip_main.call_count, 2)
+
+    @mock.patch('no_drama.pip_automation.is_cache_update_required')
+    @mock.patch('no_drama.pip_automation.record_req_cached')
+    @mock.patch('no_drama.pip_automation.pip.main')
+    def test_save_wheels_pip_failure(self, mock_pip_main,
+            mock_record_req_cached, mock_is_cache_update_required):
+        mock_is_cache_update_required.return_value = False
+
+        # Fail the second call to pip.main()
+        mock_pip_main.side_effect = [0, 1]
+        with self.assertRaises(ValueError):
+            pip_automation.save_wheels('/bootsrap_wheels', ['some', 'packages'], 
+                    ['first.txt', 'second.txt'])
+            self.assertEqual(mock_pip_main.call_count, 2)
+
+        # Fail the first call to pip.main()
+        mock_pip_main.reset_mock()
+        mock_pip_main.side_effect = [1, 0]
+        with self.assertRaises(ValueError):
+            pip_automation.save_wheels('/bootsrap_wheels', ['some', 'packages'], 
+                    ['first.txt', 'second.txt'])
+            self.assertEqual(mock_pip_main.call_count, 1)
