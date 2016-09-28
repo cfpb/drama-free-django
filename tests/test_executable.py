@@ -57,13 +57,12 @@ class TestExecutable(unittest.TestCase):
             bit hacky. """
         mock_os_getcwd.return_value = '/some-path'
 
-        # This should build the self-extraction script, then slice 
-        # out just the deploy_to function, and finally exec it into the
-        # local namespace.
+        # This should build the self-extraction script, then exec it into 
+        # the local namespace.
         prefix = 'build-number-1'
         script_string = executable.self_extraction_script.format(prefix=prefix)
-        deploy_to_string = '\n'.join(script_string.splitlines()[6:25])
-        exec(script_string, globals())
+        script_obj = compile(script_string, '__main__.py', 'exec')
+        exec(script_obj, globals())
 
         deploy_to('archive.zip', '/deployment-path')
 
