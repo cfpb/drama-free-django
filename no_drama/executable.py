@@ -10,10 +10,10 @@ import zipfile
 import subprocess
 import argparse
 
-def deploy_to(deployment_dir=None):
-    prefix = '%s'
+def deploy_to(archive, deployment_dir=None):
+    prefix = '{prefix}'
 
-    zip_path= os.path.join(os.getcwd(),__loader__.archive)
+    zip_path= os.path.join(os.getcwd(), archive)
     destination = deployment_dir or os.path.dirname(zip_path)
     bundle = zipfile.ZipFile(zip_path)
 
@@ -28,13 +28,13 @@ def deploy_to(deployment_dir=None):
     activate_script = os.path.join(bundle_dir,'activate.sh')
 
     os.chdir(original_cwd)
-    subprocess.call(['sh',activate_script])
+    subprocess.check_call(['sh',activate_script])
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="deploy this release")
     parser.add_argument('--destination', '-d')
     args = parser.parse_args()
-    deploy_to(args.destination)
+    deploy_to(__loader__.archive, args.destination)
 """
 
 
@@ -45,8 +45,7 @@ def make_executable(archive_name, prefix):
 
     build_zip.writestr(
         '__main__.py',
-        self_extraction_script %
-        prefix)
+        self_extraction_script.format(prefix=prefix))
     build_zip.close()
 
     executable_preamble = "#!/usr/bin/env python2.7\n"
