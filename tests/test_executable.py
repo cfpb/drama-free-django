@@ -61,7 +61,8 @@ class TestExecutable(unittest.TestCase):
         # the local namespace.
         prefix = 'build-number-1'
         script_string = executable.self_extraction_script.format(prefix=prefix)
-        exec(script_string, globals())
+        script_obj = compile(script_string, '__main__.py', 'exec')
+        exec(script_obj, globals())
 
         deploy_to('archive.zip', '/deployment-path')
 
