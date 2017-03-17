@@ -8,7 +8,7 @@ setup(
     include_package_data = True,
     entry_points={
         'console_scripts':[
-            'no-drama=no_drama.__main__:main'
+            'no-drama=no_drama.cli:main'
         ]
     },
     install_requires=[
