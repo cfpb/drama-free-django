@@ -2,8 +2,8 @@
 
 from setuptools import setup, find_packages
 setup(
-    name = "drama-free-django",
-    version = "0.1",
+    name = "no-drama",
+    version = "2.0",
     packages = find_packages(),
     include_package_data = True,
     entry_points={
@@ -12,12 +12,7 @@ setup(
         ]
     },
     install_requires=[
-        'wheel>=0.29.0',
-        'pip>=8.1.1',
-        'setuptools>=20.2.2',
-    ],
-    tests_require = [
-        'mock',
+        'jinja2>=2.9.5',
     ],
     test_suite='tests',
 )
