@@ -1,0 +1,12 @@
+import os
+import json
+
+def load_environment_json(path):
+    with open(path) as env_file:
+        new_env_vars = json.load(env_file)
+        os.environ.update(new_env_vars)
+
+var_files = {{ repr(args.vars) }}
+
+for path in var_files:
+    load_environment_json(path)

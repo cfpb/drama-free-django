@@ -22,7 +22,8 @@ parser.add_argument('--vars', help="path(s) to JSON-encoded environment"
                                    "variables", type=abspath, nargs="*")
 parser.add_argument('--paths', help="prepend path(s) to sys.path", nargs="*",
                     type=abspath)
-
+parser.add_argument('--python', help="path to python executable",
+                    default='/usr/bin/env python')
 
 def main():
     args = parser.parse_args()

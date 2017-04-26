@@ -1,0 +1,18 @@
+# based on https://groups.google.com/d/msg/pants-devel/vm19M1LgCU8/azTfi7vG-J0J
+import sys
+import os
+
+# stole the function from pex.bootstrap_pex
+def bootstrap_pex_env(entry_point):
+  """Bootstrap the current runtime environment using a given pex."""
+  from _pex.environment import PEXEnvironment
+  from _pex.finders import register_finders
+  from _pex.pex_info import PexInfo
+
+  register_finders()
+
+  return PEXEnvironment(entry_point, PexInfo.from_pex(entry_point)).activate()
+
+path_to_pex_file = '{{ args.environment_path }}'
+sys.path.insert(0, os.path.join(path_to_pex_file, '.bootstrap'))
+working_set = bootstrap_pex_env(path_to_pex_file)

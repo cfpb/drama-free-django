@@ -1,0 +1,17 @@
+try:
+    iter_entry_points = working_set.iter_entry_points
+except NameError:
+    from pkg_resources import iter_entry_points
+
+entry_point_name = '{{ args.name }}'
+found_entry_point=False
+
+for entry_point in iter_entry_points('console_scripts'):
+    if entry_point.name == entry_point_name:
+        found_entry_point = True
+        runner = entry_point.resolve()
+        runner()
+        break
+
+if not found_entry_point:
+    print "could not find a console script called %s" % entry_point_name
