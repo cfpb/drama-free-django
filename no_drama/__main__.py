@@ -125,7 +125,7 @@ def inject_configuration(cli_args):
         if cli_args.paths:
             build_zip.write(
                 cli_args.paths, os.path.join(
-                    zip_root, 'paths.json'))
+                    zip_root, 'paths.d/1_custom.json'))
 
         if cli_args.prepend_wsgi:
             build_zip.write(cli_args.prepend_wsgi,
