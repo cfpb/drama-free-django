@@ -14,7 +14,7 @@ def record_req_cached(path):
 
 def save_wheels(destination, packages=[], requirements_paths=[]):
     save_wheel_command_prefix = (
-        " wheel --no-deps --wheel-dir=%s" %
+        " wheel --wheel-dir=%s" %
         destination).split()
 
     requirements_install_args = []
