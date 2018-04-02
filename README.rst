@@ -57,9 +57,10 @@ Make a release
 
    usage: no-drama release [-h] [--paths PATHS]
                            [--requirements_file REQUIREMENTS_FILE]
+                           [--prepend-wsgi PREPEND_WSGI]
                            [--append-wsgi APPEND_WSGI]
                            build_zip vars slug
-   
+
    positional arguments:
      build_zip             path to a zip file generated with 'no-drama build'
      vars                  JSON dictionary of env variables
@@ -71,6 +72,9 @@ Make a release
      --requirements_file REQUIREMENTS_FILE
                            just like you would 'pip install -r'. Let's you add
                            more wheels to the build
+     --prepend-wsgi PREPEND_WSGI
+                           text file w/ additional python code to modify the
+                           environment before the wsgi 'application' is created
      --append-wsgi APPEND_WSGI
                            text file w/ additional python code to modify the wsgi
                            'application'
