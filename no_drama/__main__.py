@@ -33,7 +33,7 @@ def stage_bundle(cli_args):
         shutil.copytree(build_skel, build_dir)
 
         # these are wheels needed during activation
-        bootstrap_wheels = ['virtualenv', 'pip>=8.1.1,<=9.0.3', 'wheel>=0.29.0,<0.32', 'setuptools']
+        bootstrap_wheels = ['virtualenv', 'pip==18', 'setuptools']
         bootstrap_wheels_destination = os.path.join(
             build_dir, 'bootstrap_wheels')
         save_wheels(packages=bootstrap_wheels,
