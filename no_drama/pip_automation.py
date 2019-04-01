@@ -1,27 +1,22 @@
-import os
-import pip
-import hashlib
-
-
-
-def record_req_cached(path):
-    marker_path = cache_marker_for_path(path)
-    if not os.path.exists('requirements_hashes'):
-        os.mkdir('requirements_hashes')
-    with open(marker_path, 'wb') as marker_file:
-        marker_file.write('')
+import subprocess
+import sys
 
 
 def save_wheels(destination, packages=[], requirements_paths=[]):
-    save_wheel_command_prefix = (
-        " wheel --wheel-dir=%s" %
-        destination).split()
+    """Collect Python wheels for all packages and requirements.
 
-    requirements_install_args = []
+    Given a list of packages and requirements files, invoke "pip wheel" to
+    download and/or create wheels for each of them, storing them in the
+    specified destination directory.
+    """
 
-    for path in requirements_paths:
-        requirements_install_args += ['-r', path]
-
-    status = pip.main(save_wheel_command_prefix + packages + requirements_install_args)
-    if status != 0:
-        raise ValueError("non-zero return from pip.main() when installing")
+    # Call pip externally using this command:
+    #
+    # python -m pip wheel --wheel-dir=dest p1 p2 p3 -r req1.txt -r req2.txt
+    # https://pip.pypa.io/en/stable/user_guide/#using-pip-from-your-program
+    subprocess.check_call(
+        [sys.executable, '-m', 'pip'] +
+        ['wheel', '--wheel-dir=%s' % destination] +
+        packages +
+        ['-r' + path for path in requirements_paths]
+    )
