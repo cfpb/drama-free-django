@@ -25,16 +25,19 @@ Make a build
 
 ::
 
-   usage: no-drama build [-h] project_path requirements_file name label
+   usage: no-drama build [--aux AUX] [-f] [-h] [-r R] [--static STATIC] project_path name label
 
    positional arguments:
-     project_path
-     requirements_file  just like you would 'pip install -r'
-     name               name of this project
-     label              a label for this build-- maybe a build ID or version number
+     project_path   source directory containing project code
+     name           name for this project
+     label          a label for this build, maybe a build ID or version number
 
    optional arguments:
-     -h, --help         show this help message and exit
+     -h, --help     show this help message and exit
+     -f             force rebuild even if target archive already exists
+     --aux          add an additional source directory
+     -r             add an external requirements file
+     --static       add an additional static files directory
   
 
 to generate a build of the current cfgov-refresh_, you would (after running the front-end build process as documented in their README), run::
@@ -70,7 +73,7 @@ Make a release
      -h, --help            show this help message and exit
      --paths PATHS         json file for overriding default paths
      --requirements_file REQUIREMENTS_FILE
-                           just like you would 'pip install -r'. Let's you add
+                           just like you would 'pip install -r'. Lets you add
                            more wheels to the build
      --prepend-wsgi PREPEND_WSGI
                            text file w/ additional python code to modify the

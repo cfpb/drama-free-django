@@ -1,8 +1,0 @@
-configparser==3.5.0
-enum34==1.1.6
-flake8==3.0.4 
-mccabe==0.5.2 
-pycodestyle==2.0.0 
-pyflakes==1.2.3
-funcsigs==1.0.2 
-mock==2.0.0

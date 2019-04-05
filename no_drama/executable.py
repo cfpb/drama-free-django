@@ -39,22 +39,24 @@ if __name__ == '__main__':
 
 
 def make_executable(archive_name, prefix):
-    temp_name = archive_name + '_'
-    shutil.move(archive_name, temp_name)
-    build_zip = zipfile.ZipFile(temp_name, 'a')
+    temp_archive_name = archive_name + '_'
+    shutil.move(archive_name, temp_archive_name)
 
-    build_zip.writestr(
-        '__main__.py',
-        self_extraction_script.format(prefix=prefix))
-    build_zip.close()
+    with zipfile.ZipFile(temp_archive_name, 'a') as build_zip:
+        build_zip.writestr(
+            '__main__.py',
+            self_extraction_script.format(prefix=prefix)
+        )
 
-    executable_preamble = "#!/usr/bin/env python2.7\n"
+    executable_preamble = b"#!/usr/bin/env python\n"
 
     with open(archive_name, 'wb') as executable_file:
         executable_file.write(executable_preamble)
-        executable_file.write(open(temp_name).read())
+
+        with open(temp_archive_name, 'rb') as temp_archive:
+            executable_file.write(temp_archive.read())
 
     exe_permissions = os.stat(archive_name)[0]
     new_permissions = exe_permissions | stat.S_IXOTH | stat.S_IXGRP | stat.S_IXUSR
     os.chmod(archive_name, new_permissions)
-    os.unlink(temp_name)
+    os.unlink(temp_archive_name)

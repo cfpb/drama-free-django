@@ -12,12 +12,12 @@ setup(
         ]
     },
     install_requires=[
-        'wheel>=0.29.0,<0.32',
-        'pip>=8.1.1,<=9.0.3',
+        'wheel>=0.29.0',
+        'pip>=8.1.1',
         'setuptools>=20.2.2',
     ],
     tests_require=[
-        'mock',
+        'mock==2.0.0',
     ],
     test_suite='tests',
 )
