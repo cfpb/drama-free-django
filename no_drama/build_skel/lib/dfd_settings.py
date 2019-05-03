@@ -16,9 +16,6 @@ static_out = dfd.get_path('static_out')
 secret_key_path = dfd.get_path_if_exists('secret_key')
 media_root_path = dfd.get_path_if_exists('persistent_media_root')
 
-
-DEBUG = bool(dfd.get_path_if_exists('debug_if_exists'))
-
 if secret_key_path:
     with open(secret_key_path) as secret_key_file:
         SECRET_KEY=secret_key_file.read()
