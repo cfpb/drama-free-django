@@ -1,4 +1,5 @@
 import json
+import glob
 import os
 import os.path
 import shutil
@@ -29,18 +30,24 @@ def stage_bundle(cli_args):
         shutil.copytree(build_skel, build_dir)
 
         # these are wheels needed during activation
-        bootstrap_wheels = ['virtualenv', 'pip', 'setuptools']
+        bootstrap_wheels = ['virtualenv', 'pip', 'setuptools', 'wheel']
         bootstrap_wheels_destination = os.path.join(
             build_dir, 'bootstrap_wheels')
-        save_wheels(packages=bootstrap_wheels,
+        save_wheels(cli_args.python[0]['name'], packages=bootstrap_wheels,
                     destination=bootstrap_wheels_destination)
 
         # move just the wheels we want into the bundle dir
-        wheel_destination = os.path.join(build_dir, 'wheels')
-        if cli_args.r:
-            save_wheels(
-                destination=wheel_destination,
-                requirements_paths=cli_args.r)
+        bootstrap_wheels = glob.glob(
+            os.path.join(bootstrap_wheels_destination, '*.whl'))
+        for python in cli_args.python:
+            wheel_destination = os.path.join(
+                build_dir, 'wheels-'+python['slug'])
+            if cli_args.r:
+                save_wheels(
+                    python['name'],
+                    destination=wheel_destination,
+                    requirements_paths=cli_args.r,
+                    pythonpaths=bootstrap_wheels)
 
         # copy django project into bundle dir
         project_complete_path = os.path.join(
