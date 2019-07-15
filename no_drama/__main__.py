@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import json
 import subprocess
 import sys
 
@@ -15,10 +16,15 @@ def python_details(python_name):
     two_or_three = subprocess.check_output(
         [python_name, "-c", "import sys;print(sys.version)"])[0]
     slug = 'python' + two_or_three
+    supported_tags = [tuple(l) for l in json.loads(
+        subprocess.check_output(
+            [python_name,
+             '-c', 'import json;from pip._internal import pep425tags;print(json.dumps(pep425tags.get_supported()))']))]
     if slug not in SEEN_PYTHON_SLUGS:
         SEEN_PYTHON_SLUGS.append(slug)
         return {'name': python_name,
-                'slug': slug}
+                'slug': slug,
+                'supported_tags': supported_tags}
     else:
         raise ValueError("only one %s can be defined!" % slug)
 
