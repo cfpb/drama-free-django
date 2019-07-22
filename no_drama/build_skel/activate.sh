@@ -19,3 +19,5 @@ echo `$DIR/venv/bin/python $DIR/lib/dfd.py django_root`>>$SITE_PACKAGES/no_drama
 
 $DIR/venv/bin/pip install $DIR/wheels/*.whl --force
 $DIR/venv/bin/python -m activate_phase2
+
+chmod +x $DIR/manage.py
