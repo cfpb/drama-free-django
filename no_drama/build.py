@@ -56,8 +56,14 @@ def stage_bundle(cli_args):
 "exec" "`dirname $0`/venv/bin/python" "$0" "$@"
 execfile('%s/manage.py')
        ''' % project_slug
-        with open(os.path.join(build_dir, 'manage.py'), 'w') as manage_py:
+        manage_py_path = os.path.join(build_dir, 'manage.py')
+        with open(manage_py_path, 'w') as manage_py:
             manage_py.write(manage_py_script)
+
+        # make the manage.py script executable
+        mode = os.stat(manage_py_path).st_mode
+        mode |= (mode & 0o444) >> 2    # copy R bits to X
+        os.chmod(manage_py_path, mode)
 
         # install paths.d/0_build.json, so activate.sh can find the django_root
         paths_d = os.path.join(build_dir, 'paths.d')
