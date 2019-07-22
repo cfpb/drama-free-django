@@ -50,6 +50,15 @@ def stage_bundle(cli_args):
         project_destination = os.path.join(build_dir, project_slug)
         shutil.copytree(cli_args.project_path, project_destination)
 
+        # create a 'manage.py' script that runs in the virtualenv
+
+        manage_py_script = '''#!/bin/sh
+"exec" "`dirname $0`/venv/bin/python" "$0" "$@"
+execfile('%s/manage.py')
+       ''' % project_slug
+        with open(os.path.join(build_dir, 'manage.py'), 'w') as manage_py:
+            manage_py.write(manage_py_script)
+
         # install paths.d/0_build.json, so activate.sh can find the django_root
         paths_d = os.path.join(build_dir, 'paths.d')
         initial_paths_path = os.path.join(paths_d, '0_build.json')
