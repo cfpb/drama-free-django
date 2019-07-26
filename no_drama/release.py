@@ -37,9 +37,10 @@ def inject_configuration(cli_args):
                     zip_wheel_dir, os.path.basename(wheel_path))
                 build_zip.write(wheel_path, arcname=name)
 
-        build_zip.write(
-            cli_args.vars, os.path.join(
-                zip_root, 'environment.json'))
+        if cli_args.vars:
+            build_zip.write(
+                cli_args.vars, os.path.join(
+                    zip_root, 'environment.json'))
 
         if cli_args.paths:
             build_zip.write(

@@ -48,7 +48,7 @@ def parse_args(args=None):
     release_parser.add_argument('build_zip', help='path to a zip file'
                                 " generated with 'no-drama build'")
     release_parser.add_argument(
-        'vars', help="JSON dictionary of env variables")
+        'vars', nargs='?', help="JSON dictionary of env variables")
     release_parser.add_argument('slug', help="a label for this release")
 
     release_parser.add_argument('--paths', help="json file for overriding"
