@@ -35,18 +35,29 @@ for pathfile in pathfiles:
     pathfile.close()
 
 
+def make_path(relpath):
+    return os.path.normpath(os.path.join(root, relpath))
+
+
 def get_path(name):
-    relpath = paths[name]
-    if relpath is not None and bool(relpath) is True:
-        joined = os.path.join(root, relpath)
-        return os.path.normpath(joined)
-    else:
+    relpath = paths.get(name)
+
+    if not relpath:
         raise KeyError('no path found for %s' % name)
 
+    return make_path(relpath)
+
 def get_path_if_exists(name):
-    path = get_path(name)
-    if os.path.exists(path):
-        return path
+    if name not in paths:
+        raise KeyError('no path found for %s' % name)
+
+    relpath = paths[name]
+
+    if relpath:
+        path = make_path(relpath)
+
+        if os.path.exists(path):
+            return path
 
 
 if __name__ == '__main__':
