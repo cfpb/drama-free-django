@@ -1,8 +1,10 @@
 import json
+import glob
 import os
 import os.path
 import shutil
 
+from pip._internal import wheel
 from no_drama.context import temp_directory
 from no_drama.executable import make_executable
 from no_drama.pip_automation import save_wheels
@@ -12,6 +14,18 @@ this_file = os.path.realpath(__file__)
 this_directory = os.path.dirname(this_file)
 build_skel = os.path.join(this_directory, 'build_skel')
 
+
+def wheel_tags_iterator(wheel_name):
+    py_tags, abi_tags, platform_tags= (wheel_name.split('-')[-3:])
+    for py_tag in py_tags.split('.'):
+        for abi_tag in abi_tags.split('.'):
+            for platform_tag in platform_tags.split('.'):
+                yield [py_tag,abi_tag,platform_tag]
+
+
+def supported_wheels_filter(wheel_paths, supported_tags):
+    return [path for path in wheel_paths if wheel.Wheel(
+        path).supported(tags=supported_tags)]
 
 def stage_bundle(cli_args):
     archive_basename = "%s_%s" % (cli_args.name, cli_args.label)
@@ -29,18 +43,34 @@ def stage_bundle(cli_args):
         shutil.copytree(build_skel, build_dir)
 
         # these are wheels needed during activation
-        bootstrap_wheels = ['virtualenv', 'pip', 'setuptools']
+        bootstrap_wheels = ['virtualenv', 'pip', 'setuptools', 'wheel']
         bootstrap_wheels_destination = os.path.join(
             build_dir, 'bootstrap_wheels')
-        save_wheels(packages=bootstrap_wheels,
+        save_wheels(cli_args.python, packages=bootstrap_wheels,
                     destination=bootstrap_wheels_destination)
 
         # move just the wheels we want into the bundle dir
-        wheel_destination = os.path.join(build_dir, 'wheels')
+        wheel_destination = os.path.join(
+            build_dir, 'wheels')
+
+
         if cli_args.r:
             save_wheels(
+                cli_args.python,
                 destination=wheel_destination,
                 requirements_paths=cli_args.r)
+
+        wheels = glob.glob(
+            os.path.join(wheel_destination, '*.whl'))
+
+        # write a requirements file for each python version
+        for python in cli_args.python:
+            requirements_file_path = os.path.join(
+                build_dir,'requirements-%s.txt' % python['slug'])
+            compatible_wheels = supported_wheels_filter(wheels, python['supported_tags'])
+            reqlines = [os.path.relpath(p, build_dir) + '\n' for p in compatible_wheels]
+            with open(requirements_file_path, 'wb') as reqfile:
+                reqfile.writelines(reqlines)
 
         # copy django project into bundle dir
         project_complete_path = os.path.join(

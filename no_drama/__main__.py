@@ -1,10 +1,32 @@
 #!/usr/bin/env python
 
 import argparse
+import json
+import subprocess
 import sys
 
 from no_drama.build import stage_bundle
 from no_drama.release import inject_configuration
+
+
+SEEN_PYTHON_SLUGS = []
+
+
+def python_details(python_name):
+    two_or_three = subprocess.check_output(
+        [python_name, "-c", "import sys;print(sys.version)"])[0]
+    slug = 'python' + two_or_three
+    supported_tags = [tuple(l) for l in json.loads(
+        subprocess.check_output(
+            [python_name,
+             '-c', 'import json;from pip._internal import pep425tags;print(json.dumps(pep425tags.get_supported()))']))]
+    if slug not in SEEN_PYTHON_SLUGS:
+        SEEN_PYTHON_SLUGS.append(slug)
+        return {'name': python_name,
+                'slug': slug,
+                'supported_tags': supported_tags}
+    else:
+        raise ValueError("only one %s can be defined!" % slug)
 
 
 def parse_args(args=None):
@@ -30,6 +52,10 @@ def parse_args(args=None):
     build_parser.add_argument('--aux', action='append',
                               help='extra directories to include, in form'
                               ' name=/path/to/dir.')
+
+    build_parser.add_argument('--python', action='append', required=True,
+                              type=python_details,
+                              help="build wheels for this python")
 
     build_parser.add_argument(
         '--static',
